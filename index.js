@@ -1,4 +1,4 @@
-const mineflayer = require('mineflayer');
+require('mineflayer');
 const { GoogleGenAI } = require('@google/genai');
 const http = require('http');
 
@@ -98,5 +98,4 @@ bot.on('chat', async (username, message) => {
 
 bot.on('end', () => {
   console.log('Disconnected. Restarting process...');
-  setTimeout(() => process.exit(1), 5000);
-});
+  setTimeout(() => process.exit(
