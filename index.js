@@ -1,4 +1,4 @@
-require('mineflayer');
+e('mineflayer');
 const { GoogleGenAI } = require('@google/genai');
 const http = require('http');
 
