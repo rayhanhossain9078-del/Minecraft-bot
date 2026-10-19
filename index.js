@@ -1,7 +1,17 @@
 const mineflayer = require('mineflayer');
 const { GoogleGenAI } = require('@google/genai');
+const http = require('http');
 
-// Google AI Studio API Key (Render Host Environmental Variable থেকে লোড হবে)
+// Render-কে সন্তুষ্ট রাখতে একটি ছোট HTTP ওয়েব সার্ভার
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('GeminiBot is running 24/7!\n');
+}).listen(port, () => {
+  console.log(`Web server listening on port ${port}`);
+});
+
+// Google AI Studio API Key
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // Aternos সার্ভার কনফিগারেশন
@@ -9,15 +19,15 @@ const bot = mineflayer.createBot({
   host: 'Smp2O.aternos.me',
   port: 26849,
   username: 'GeminiBot',
-  version: false // অটোমেটিক ভার্সন ডিটেক্ট করবে
+  version: false
 });
 
-// অ্যান্টি-এএফকে (Anti-AFK) ফাংশন যাতে Aternos সার্ভার অফ না হয়ে যায়
+// Anti-AFK মোড
 bot.on('spawn', () => {
   console.log('GeminiBot successfully joined Smp2O.aternos.me!');
   setInterval(() => {
     bot.swingArm('right');
-  }, 15000); // প্রতি ১৫ সেকেন্ডে হাত নাড়াবে
+  }, 15000);
 });
 
 // ইন-গেম এআই চ্যাট হ্যান্ডলার
@@ -38,8 +48,8 @@ bot.on('chat', async (username, message) => {
   }
 });
 
-// অটো রিকানেক্ট (যদি সার্ভার রিস্টার্ট হয়)
+// অটো রিকানেক্ট লজিক
 bot.on('end', () => {
-  console.log('Bot disconnected. Attempting reconnect in 15 seconds...');
-  setTimeout(() => process.exit(1), 15000);
+  console.log('Bot disconnected. Reconnecting in 10 seconds...');
+  setTimeout(() => process.exit(1), 10000);
 });
