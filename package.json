@@ -1,13 +1,13 @@
-
 {
-  "name": "gemini-minecraft-bot",
-  "version": "1.0.0",
+  "name": "minecraft-player-alex",
+  "version": "2.0.0",
+  "description": "Natural Minecraft Companion",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@google/genai": "latest",
-    "mineflayer": "^4.20.0"
+    "@google/genai": "^0.1.1",
+    "mineflayer": "^4.20.1"
   }
 }
