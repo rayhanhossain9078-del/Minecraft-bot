@@ -119,34 +119,6 @@ bot.on('kicked', (reason) => {
     }
   }, 1800);
 
-  // Natural Humanlike Chat Response
-  bot.on('chat', async (username, message) => {
-    if (username === bot.username || !message) return;
-
-    console.log(`[Chat] ${username}: ${message}`);
-
-    // Natural Response Delay (Simulating Typing Speed)
-    const delay = Math.floor(Math.random() * 2000) + 1500;
-
-    setTimeout(async () => {
-      try {
-        const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
-          contents: `You are a friendly regular Minecraft player named Alex playing on a survival server Smp2O.aternos.me. Player ${username} said: "${message}". Reply naturally as a human gamer in short Bengali or English under 80 characters. Never say you are an AI, bot, or automated program.`,
-        });
-
-        const reply = response.text ? response.text.trim().replace(/\n/g, ' ') : null;
-
-        if (reply && bot) {
-          console.log(`[Alex Chat Reply]: ${reply}`);
-          bot.chat(reply);
-        }
-      } catch (err) {
-        console.error('[AI Error]:', err.message);
-      }
-    }, delay);
-  });
-
   // Error & Reconnection handling
   bot.on('error', (err) => {
     console.log('[Client Error]:', err.message);
