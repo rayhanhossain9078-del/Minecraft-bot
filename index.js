@@ -72,7 +72,23 @@ function createPlayer() {
       checkAndSleep();
     }
   });
+// AI Chat Bot Logic
+    bot.on('chat', async (username, message) => {
+        if (username === bot.username) return;
 
+        try {
+            const response = await ai.models.generateContent({
+                model: 'gemini-1.5-flash',
+                contents: message,
+            });
+
+            if (response.text) {
+                bot.chat(response.text);
+            }
+        } catch (error) {
+            console.error("[AI Error]:", error.message);
+        }
+    });
   async function checkAndSleep() {
     if (!bot || !bot.entity || bot.isSleeping) return;
     const bed = bot.findBlock({
