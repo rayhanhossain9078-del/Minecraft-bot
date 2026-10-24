@@ -83,30 +83,7 @@ bot.on('kicked', (reason) => {
       checkAndSleep();
     }
   });
-// AI Chat Bot Logic
-  // AI Chat Bot Logic (Safe & Crash-Free)
-bot.on('chat', async (username, message) => {
-    if (username === bot.username) return;
-    
-    // শুধুমাত্র সাধারণ টেক্সট মেসেজ ফিল্টার করা যাতে [object Object] এরর না আসে
-    if (typeof message !== 'string') return;
 
-    try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-3.8-flash',
-            contents: message,
-        });
-
-        const replyText = response.text ? String(response.text) : "";
-        
-        if (replyText.trim().length > 0) {
-            const cleanReply = replyText.replace(/\n/g, ' ').substring(0, 200);
-            bot.chat(cleanReply);
-        }
-    } catch (error) {
-        console.error("[AI Error]:", error.message);
-    }
-});
   async function checkAndSleep() {
     if (!bot || !bot.entity || bot.isSleeping) return;
     const bed = bot.findBlock({
