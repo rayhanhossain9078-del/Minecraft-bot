@@ -28,7 +28,18 @@ let bot = null;
 
 function createPlayer() {
   bot = mineflayer.createBot(botOptions);
+// ডিসকানেক্ট হলে বা কিক খেলে যেন ক্র্যাশ করে প্রসেস বন্ধ না হয়ে যায়
+bot.on('end', (reason) => {
+    console.log(`[Game] Bot disconnected because: ${reason}. Reconnecting in 10s...`);
+    setTimeout(() => {
+        // এখানে চাইলে পুনরায় createPlayer() কল করে রি-কানেক্ট করাতে পারো
+        process.exit(0); // ক্লিন এক্সিট দিলে GitHub Actions এটিকে সফলভাবে রিস্টার্ট করবে
+    }, 10000);
+});
 
+bot.on('kicked', (reason) => {
+    console.log(`[Game] Bot was kicked for: ${reason}`);
+});
   bot.on('spawn', () => {
     console.log(`[Game] ${bot.username} joined Smp2O.aternos.me`);
     
