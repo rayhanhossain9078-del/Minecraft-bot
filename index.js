@@ -73,22 +73,28 @@ function createPlayer() {
     }
   });
 // AI Chat Bot Logic
-    bot.on('chat', async (username, message) => {
-        if (username === bot.username) return;
+  // AI Chat Bot Logic
+bot.on('chat', async (username, message) => {
+    if (username === bot.username) return;
 
-        try {
-            const response = await ai.models.generateContent({
-                model: 'gemini-3.8-flash',
-                contents: message,
-            });
+    try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-3.8-flash', // অথবা তোমার সেট করা মডেলের নাম
+            contents: message,
+        });
 
-            if (response.text) {
-                bot.chat(response.text);
-            }
-        } catch (error) {
-            console.error("[AI Error]:", error.message);
+        // রেসপন্স থেকে টেক্সট বের করা এবং নিশ্চিত করা যে এটি স্ট্রিং
+        const replyText = response.text ? String(response.text) : "";
+        
+        if (replyText.trim().length > 0) {
+            // মাইনক্রাফট চ্যাটে নিউ-লাইন বা বড় মেসেজের ঝামেলা এড়াতে শুধু প্রথম অংশ পাঠানো বা ফরম্যাট করা
+            const cleanReply = replyText.replace(/\n/g, ' ').substring(0, 256);
+            bot.chat(cleanReply);
         }
-    });
+    } catch (error) {
+        console.error("[AI Error]:", error.message);
+    }
+});
   async function checkAndSleep() {
     if (!bot || !bot.entity || bot.isSleeping) return;
     const bed = bot.findBlock({
